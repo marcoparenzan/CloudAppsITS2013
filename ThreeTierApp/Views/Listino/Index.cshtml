@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ThreeTierApp.Models.Articolo>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Edit")
+</p>
+<p>
+    @Html.ActionLink("Create Categoria 1", "Edit", new { categoryId = 1 })
+</p>
+<table>
+    <tr>
+        <th>
+            Codice
+        </th>
+        <th>
+            Descrizione
+        </th>
+        <th>
+            Prezzo
+        </th>
+        <th>
+            CategoriaId
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Codice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descrizione)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CategoriaId)
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.Prezzo)
+        </td>
+      <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ArticoloId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ArticoloId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ArticoloId })
+        </td>
+    </tr>
+}
+
+</table>
