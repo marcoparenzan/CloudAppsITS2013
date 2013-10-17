@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ThreeTierApp.Models.Articolo>
+﻿@model ThreeTierApp.Models.PageOf<ThreeTierApp.Models.ArticoloDTO>
 
 @{
     ViewBag.Title = "Index";
@@ -15,33 +15,22 @@
 <table>
     <tr>
         <th>
-            Codice
+            ArticoloId
         </th>
         <th>
             Descrizione
         </th>
-        <th>
-            Prezzo
-        </th>
-        <th>
-            CategoriaId
-        </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.Items) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Codice)
+            @Html.DisplayFor(modelItem => item.ArticoloId)
+            @*@Html.Display(typeof(ThreeTierApp.Models.Articolo).GetProperty("Codice").GetValue(item).ToString())*@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Descrizione)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CategoriaId)
-        </td>
-          <td>
-            @Html.DisplayFor(modelItem => item.Prezzo)
         </td>
       <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ArticoloId }) |
@@ -52,3 +41,4 @@
 }
 
 </table>
+@Model.Total items - Page @Model.PageNumber of @Model.PageCount

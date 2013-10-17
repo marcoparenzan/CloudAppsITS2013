@@ -1,4 +1,4 @@
-﻿@model ThreeTierApp.Models.Articolo
+﻿@model ThreeTierApp.Models.ArticoloViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -14,7 +14,7 @@
     <fieldset>
         <legend>Articolo</legend>
 
-        @Html.HiddenFor(model => model.ArticoloId)
+        @Html.Hidden("id", (string) ViewBag.id)
 
         <div class="editor-label">
             @Html.LabelFor(model => model.Codice)
@@ -33,15 +33,27 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.CategoriaId)
+            @Html.LabelFor(model => model.Categoria)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.CategoriaId)
-            @Html.ValidationMessageFor(model => model.CategoriaId)
+            <select id="Categoria" name="Categoria">
+                <option value="1">Base</option>
+                <option value="2">Super</option>
+                <option value="3">Pro</option>
+            </select>
+            @Html.ValidationMessageFor(model => model.Categoria)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.Prezzo)
             @Html.ValidationMessageFor(model => model.Prezzo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PromozioneInOfferta)
+            @Html.ValidationMessageFor(model => model.PromozioneInOfferta)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PromozioneMetaPrezzo)
+            @Html.ValidationMessageFor(model => model.PromozioneMetaPrezzo)
         </div>
 
         <p>

@@ -104,7 +104,9 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Articolo.cs" />
+    <Compile Include="Models\ArticoloViewModel.cs" />
     <Compile Include="Models\Listino.cs" />
+    <Compile Include="Models\PageOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -226,7 +228,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>60502</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:49357/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

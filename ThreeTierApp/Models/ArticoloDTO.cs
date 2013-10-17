@@ -8,6 +8,7 @@ namespace ThreeTierApp.Models
     public class ArticoloDTO
     {
         public int ArticoloId { get; set; }
-        public string Codice { get; set; }
+
+        public string Descrizione { get; set; }
     }
 }

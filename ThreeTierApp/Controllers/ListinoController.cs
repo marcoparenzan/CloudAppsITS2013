@@ -25,16 +25,41 @@ namespace ThreeTierApp.Controllers
         //
         // GET: /Listino/
 
-        public ActionResult Index()
+        public ActionResult Index(int pageNumber = 0, int pageSize = 10)
         {
-            var items =
-                from item in Listino
-                select new ArticoloDTO { 
-                    ArticoloId = item.ArticoloId
-                    , Codice = item.Codice 
-                };
+            var query = Listino.AsQueryable();
+            //query = query.Where(xx => xx.ArticoloId > 0);
+            //query = query.Where(xx => xx.Codice == "A");
+            var query2 = query.Select(xx => new ArticoloDTO
+            {
+                ArticoloId = xx.ArticoloId
+                ,
+                Descrizione = xx.Descrizione
+            });
+            query2 = query2.OrderBy(xx => xx.Descrizione);
 
-            return View(items);
+            //ViewBag.pageCount = query2.Count();
+            //var items = 
+            //var page = new PageOf<ArticoloDTO>(
+            //    query2
+            //    , pageNumber
+            //    , pageSize
+            //);
+            var page = query2.Page(pageNumber, pageSize);
+            //page = PageOfExtension.Page(query2, pageNumber, pageSize);
+
+            //var xxx = 
+            //    Listino
+            //    .AsQueryable()
+            //    .Where(xx => xx.Descrizione.StartsWith("A"))
+            //    .Select(xx => new { ArticoloId = xx.ArticoloId})
+            //    .OrderBy(xx => xx.ArticoloId)
+            //    .Skip(10)
+            //    .Take(10)
+            //    .ToList();
+
+            return View(page);
+            // return View(items);
         }
 
         // GET: /Listino/Details/5
@@ -50,7 +75,7 @@ namespace ThreeTierApp.Controllers
 
         public ActionResult Create()
         {
-            var item = new Articolo();
+            var item = new ArticoloViewModel();
             return View("Edit", item);
         } 
 
@@ -114,25 +139,46 @@ namespace ThreeTierApp.Controllers
             else
             {
                 item = new Articolo();
+            }
                 if (categoryId.HasValue)
                     item.CategoriaId = categoryId.Value;
-            }
-            ViewBag.hasCategoryIdFixed = categoryId.HasValue;
-            return View(item);
+            // ViewBag.hasCategoryIdFixed = categoryId.HasValue;
+
+            var promozioni = item.Promozioni == null ? new PromozioniArticolo() : item.Promozioni;
+
+            var viewModel = new ArticoloViewModel
+            {
+                Codice = item.Codice
+                ,
+                Descrizione = item.Descrizione
+                ,
+                Prezzo = item.Prezzo
+                ,
+                Categoria = item.CategoriaId.ToString()
+                ,
+                CategoryFixed = categoryId.HasValue
+                ,
+                PromozioneInOfferta = promozioni.InOfferta
+                ,
+                PromozioneMetaPrezzo = promozioni.MetaPrezzo
+            };
+
+            return View(viewModel);
         }
 
         //
         // POST: /Listino/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int? id, Articolo articolo)
+        public ActionResult Edit(string id, ArticoloViewModel viewModel)
         {
             try
             {
                 Articolo existing = null;
-                if (articolo.ArticoloId > 0)
+                if (!string.IsNullOrWhiteSpace(id))
                 {
-                    existing = Listino.Single(xx => xx.ArticoloId == articolo.ArticoloId);
+                    var articoloId = int.Parse(id);
+                    existing = Listino.Single(xx => xx.ArticoloId == articoloId);
                 }
                 else
                 {
@@ -150,10 +196,13 @@ namespace ThreeTierApp.Controllers
                     Listino.Add(existing);
                 }
 
-                existing.Codice = articolo.Codice;
-                existing.Descrizione = articolo.Descrizione;
-                existing.CategoriaId = articolo.CategoriaId;
-                existing.Prezzo = articolo.Prezzo;
+                existing.Codice = viewModel.Codice;
+                existing.Descrizione = viewModel.Descrizione;
+                existing.CategoriaId = int.Parse(viewModel.Categoria);
+                existing.Prezzo = viewModel.Prezzo;
+                if (existing.Promozioni == null) existing.Promozioni = new PromozioniArticolo();
+                existing.Promozioni.MetaPrezzo = viewModel.PromozioneMetaPrezzo;
+                existing.Promozioni.InOfferta = viewModel.PromozioneInOfferta;
 
                 return RedirectToAction("Index");
             }
